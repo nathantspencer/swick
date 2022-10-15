@@ -3,6 +3,15 @@ from . import swc
 import re
 
 
+class SWCFormatError(Exception):
+    """
+    Error thrown during reading or writing of ``.swc`` files in
+    cases in which the format is not or cannot be properly
+    adhered to.
+    """
+    pass
+
+
 def read_swc(path: str):
     """
     Reads an ``.swc`` file to create and return an ``SWC`` object.
@@ -12,7 +21,9 @@ def read_swc(path: str):
     """
 
     swc_file = open(path, 'r')
+    line_number = 0
     for line in swc_file:
+        line_number = line_number + 1
 
         # ignore empty, white-space only, and comment lines
         line = line.strip()
@@ -21,4 +32,7 @@ def read_swc(path: str):
 
         fields = re.split(r'[\t ]+', line)
         if len(fields) != 7:
-            # TODO: throw IOError here
+            raise SWCFormatError(f"Could not read {path}. Line"
+                                 f" {line_number} contains"
+                                 f" {len(fields)} fields;"
+                                 f" expected 7 fields.")
