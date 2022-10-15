@@ -1,2 +1,2 @@
-# swcor
-Welcome to `swcor`: the operating room for SWC files, which are typically used to represent neuron structures. You could say we're doing brain surgery here, but really, it's a lot simpler than that.
+# swick
+`swick` is the slick way to process [SWC files](http://www.neuronland.org/NLMorphologyConverter/MorphologyFormats/SWC/Spec.html), which contain tree-like representations of neuron structures.
