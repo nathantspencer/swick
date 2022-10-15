@@ -1,5 +1,7 @@
 from . import swc
 
+import re
+
 
 def read_swc(path: str):
     """
@@ -9,11 +11,14 @@ def read_swc(path: str):
     :return: an ``SWC`` object containing the loaded data
     """
 
-    swc = SWC()
     swc_file = open(path, 'r')
     for line in swc_file:
 
         # ignore empty, white-space only, and comment lines
-        line = line.trim()
+        line = line.strip()
         if not line or line.startswith('#'):
             continue
+
+        fields = re.split(r'[\t ]+', line)
+        if len(fields) != 7:
+            # TODO: throw IOError here
