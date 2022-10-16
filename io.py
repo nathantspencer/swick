@@ -1,3 +1,4 @@
+from ast import Assert
 from . import swc
 
 import re
@@ -36,3 +37,20 @@ def read_swc(path: str):
                                  f" {line_number} contains"
                                  f" {len(fields)} fields;"
                                  f" expected 7 fields.")
+
+        try:
+            assert fields[0].isdigit()
+            id = int(fields[0])
+        except AssertionError:
+            raise SWCFormatError(f"Could not read {path}. Line"
+                                 f" {line_number} has ID with"
+                                 f" value {fields[0]};"
+                                 f" expected an integer.")
+
+        # TODO: error checking on these fields
+        type = int(fields[1])
+        x = float(fields[2])
+        y = float(fields[3])
+        z = float(fields[4])
+        radius = float(fields[5])
+        parent_id = int(fields[6])
