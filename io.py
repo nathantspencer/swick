@@ -17,8 +17,8 @@ def parse_int(value: str,  name: str, min_value: int, file_name: str,
               line_number: int,):
     """
     Attempts to interpet a given string ``value`` as an integer,
-    returning the integer on success and raising an
-    ``SWCFormatError`` on failure.
+    returning the integer on success and raising an ``SWCFormatError``
+    on failure.
 
     :parameter value: the string value to be parsed
     :parameter name: the name of the field being parsed
@@ -35,9 +35,29 @@ def parse_int(value: str,  name: str, min_value: int, file_name: str,
         return int_value
     except AssertionError:
         raise SWCFormatError(f"Could not read {file_name}. Line"
-                             f" {line_number} has {name} with"
-                             f" value {value}; expected an integer"
+                             f" {line_number} has {name} with value"
+                             f" \"{value}\"; expected an integer"
                              f" greater than {min_value - 1}.")
+
+
+def parse_float(value: str,  name: str, file_name: str, line_number: int,):
+    """
+    Attempts to interpet a given string ``value`` as a float, returning the
+    float on success and raising an ``SWCFormatError`` on failure.
+
+    :parameter value: the string value to be parsed
+    :parameter name: the name of the field being parsed
+    :parameter file_name: the name of the file being read
+    :parameter line_number: the line where the value occurs
+    :return: a float interpretation of the value
+    """
+
+    try:
+        return float(value)
+    except ValueError:
+        raise SWCFormatError(f"Could not read {file_name}. Line"
+                             f" {line_number} has {name} with value"
+                             f" \"{value}\"; expected a float.")
 
 
 def read_swc(path: str):
@@ -67,6 +87,10 @@ def read_swc(path: str):
 
         id = parse_int(fields[0], "ID", 1, path, line_number)
         type = parse_int(fields[1], "type", 0, path, line_number)
+        x = parse_float(fields[2], "x position", path, line_number)
+        y = parse_float(fields[3], "y position", path, line_number)
+        z = parse_float(fields[4], "z position", path, line_number)
+        radius = parse_float(fields[5], "radius", path, line_number)
         parent_id = parse_int(fields[6], "parent ID", -1, path, line_number)
 
         # TODO: parse remaining fields
