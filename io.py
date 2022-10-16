@@ -13,6 +13,33 @@ class SWCFormatError(Exception):
     pass
 
 
+def parse_int(value: str,  name: str, min_value: int, file_name: str,
+              line_number: int,):
+    """
+    Attempts to interpet a given string ``value`` as an integer,
+    returning the integer on success and raising an
+    ``SWCFormatError`` on failure.
+
+    :parameter value: the string value to be parsed
+    :parameter name: the name of the field being parsed
+    :parameter min_value: minimum valid integer value
+    :parameter file_name: the name of the file being read
+    :parameter line_number: the line where the value occurs
+    :return: an integer interpretation of the value
+    """
+
+    try:
+        assert value.isdigit()
+        int_value = int(value)
+        assert int_value >= min_value
+        return int_value
+    except AssertionError:
+        raise SWCFormatError(f"Could not read {file_name}. Line"
+                             f" {line_number} has {name} with"
+                             f" value {value}; expected an integer"
+                             f" greater than {min_value - 1}.")
+
+
 def read_swc(path: str):
     """
     Reads an ``.swc`` file to create and return an ``SWC`` object.
@@ -38,19 +65,8 @@ def read_swc(path: str):
                                  f" {len(fields)} fields;"
                                  f" expected 7 fields.")
 
-        try:
-            assert fields[0].isdigit()
-            id = int(fields[0])
-        except AssertionError:
-            raise SWCFormatError(f"Could not read {path}. Line"
-                                 f" {line_number} has ID with"
-                                 f" value {fields[0]};"
-                                 f" expected an integer.")
+        id = parse_int(fields[0], "ID", 1, path, line_number)
+        type = parse_int(fields[1], "type", 0, path, line_number)
+        parent_id = parse_int(fields[6], "parent ID", -1, path, line_number)
 
-        # TODO: error checking on these fields
-        type = int(fields[1])
-        x = float(fields[2])
-        y = float(fields[3])
-        z = float(fields[4])
-        radius = float(fields[5])
-        parent_id = int(fields[6])
+        # TODO: parse remaining fields
