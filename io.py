@@ -29,7 +29,7 @@ def parse_int(value: str,  name: str, min_value: int, file_name: str,
     """
 
     try:
-        assert value.isdigit()
+        assert value.lstrip("-").isdigit()
         int_value = int(value)
         assert int_value >= min_value
         return int_value
@@ -69,6 +69,8 @@ def read_swc(path: str):
     """
 
     swc_file = open(path, 'r')
+    nodes = dict()
+
     line_number = 0
     for line in swc_file:
         line_number = line_number + 1
@@ -94,6 +96,11 @@ def read_swc(path: str):
         parent_id = parse_int(fields[6], "parent ID", -1, path, line_number)
 
         node = swc.Node(type, x, y, z, radius, parent_id)
+        id_node_pair = (id, node)
+        if parent_id in nodes:
+            nodes[parent_id].append(id_node_pair)
+        else:
+            nodes[parent_id] = [id_node_pair]
 
     # TODO: validate that all IDs are unique
     # TODO: validate that all parent IDs point to valid IDs
