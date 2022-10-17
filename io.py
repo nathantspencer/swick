@@ -70,6 +70,7 @@ def read_swc(path: str):
 
     swc_file = open(path, 'r')
     nodes = dict()
+    id_line_numbers = dict()
 
     line_number = 0
     for line in swc_file:
@@ -95,6 +96,14 @@ def read_swc(path: str):
         radius = parse_float(fields[5], "radius", path, line_number)
         parent_id = parse_int(fields[6], "parent ID", -1, path, line_number)
 
+        if id in id_line_numbers:
+            raise SWCFormatError(f"Could not read {path}. Line"
+                                 f" {line_number} contains an ID {id}"
+                                 f" which already exists on line"
+                                 f" {id_line_numbers[id]}.")
+        else:
+            id_line_numbers[id] = line_number
+
         node = swc.Node(type, x, y, z, radius, parent_id)
         id_node_pair = (id, node)
         if parent_id in nodes:
@@ -102,5 +111,4 @@ def read_swc(path: str):
         else:
             nodes[parent_id] = [id_node_pair]
 
-    # TODO: validate that all IDs are unique
     # TODO: validate that all parent IDs point to valid IDs
