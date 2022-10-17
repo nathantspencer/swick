@@ -33,7 +33,7 @@ def parse_int(value: str,  name: str, min_value: int, file_name: str,
         int_value = int(value)
         assert int_value >= min_value
         return int_value
-    except AssertionError:
+    except (AssertionError, ValueError):
         raise SWCFormatError(f"Could not read {file_name}. Line"
                              f" {line_number} has {name} with value"
                              f" \"{value}\"; expected an integer"
