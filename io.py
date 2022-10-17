@@ -96,6 +96,12 @@ def read_swc(path: str):
         radius = parse_float(fields[5], "radius", path, line_number)
         parent_id = parse_int(fields[6], "parent ID", -1, path, line_number)
 
+        if parent_id == id:
+            raise SWCFormatError(f"Could not read {path}. Line"
+                                 f" {line_number} refers to itself as the"
+                                 f" parent. Root nodes should use parent ID"
+                                 f" -1.")
+
         if id in id_line_numbers:
             raise SWCFormatError(f"Could not read {path}. Line"
                                  f" {line_number} contains an ID {id}"
@@ -112,3 +118,4 @@ def read_swc(path: str):
             nodes[parent_id] = [id_node_pair]
 
     # TODO: validate that all parent IDs point to valid IDs
+    # TODO: ensure no cycles occur during DFS of all nodes
