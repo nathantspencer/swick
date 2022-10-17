@@ -70,6 +70,7 @@ def read_swc(path: str):
 
     swc_file = open(path, 'r')
     nodes = dict()
+    root_nodes = []
     id_line_numbers = dict()
 
     line_number = 0
@@ -112,10 +113,15 @@ def read_swc(path: str):
 
         node = swc.Node(type, x, y, z, radius, parent_id)
         id_node_pair = (id, node)
-        if parent_id in nodes:
-            nodes[parent_id].append(id_node_pair)
+        is_root = parent_id == -1
+
+        if is_root:
+            root_nodes.append(id_node_pair)
         else:
-            nodes[parent_id] = [id_node_pair]
+            if parent_id in nodes:
+                nodes[parent_id].append(id_node_pair)
+            else:
+                nodes[parent_id] = [id_node_pair]
 
     # TODO: validate that all parent IDs point to valid IDs
     # TODO: ensure no cycles occur during DFS of all nodes
