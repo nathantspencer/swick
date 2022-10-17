@@ -19,13 +19,13 @@ class Node:
     """
 
     def __init__(self, type: int, x: float, y: float, z: float, radius: float,
-                 parentID: int):
+                 parent_id: int):
         self.type = type
         self.x = x
         self.y = y
         self.z = z
         self.radius = radius
-        self.parentID = parentID
+        self.parent_id = parent_id
 
 
 class Object:

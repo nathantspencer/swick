@@ -93,4 +93,7 @@ def read_swc(path: str):
         radius = parse_float(fields[5], "radius", path, line_number)
         parent_id = parse_int(fields[6], "parent ID", -1, path, line_number)
 
-        # TODO: parse remaining fields
+        node = swc.Node(type, x, y, z, radius, parent_id)
+
+    # TODO: validate that all IDs are unique
+    # TODO: validate that all parent IDs point to valid IDs
