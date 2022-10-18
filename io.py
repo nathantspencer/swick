@@ -1,7 +1,7 @@
-from ast import Assert
 from . import swc
 
 import re
+from typing import Dict, List, Tuple
 
 
 class SWCFormatError(Exception):
@@ -58,6 +58,31 @@ def parse_float(value: str,  name: str, file_name: str, line_number: int,):
         raise SWCFormatError(f"Could not read {file_name}. Line"
                              f" {line_number} has {name} with value"
                              f" \"{value}\"; expected a float.")
+
+
+def compute_object(root_node: Tuple[int, swc.Node],
+                   nodes: Dict[int, List[Tuple[int, swc.Node]]]):
+    """
+    Beginning at the rode node, searches available nodes in order to construct
+    and return an ``Object`` containing all of the nodes connected to the root.
+
+    :parameter root_node: an ID-Node pair for the root node
+    :parameter nodes: dictionary mapping parent IDs to list of ID-Node pairs
+    :return: an ``Object`` containing all nodes connected to the root
+    """
+    parent_id_stack = [root_node[0]]
+    object_nodes = {root_node[0]: root_node[1]}
+
+    while parent_id_stack:
+        parent_id = parent_id_stack.pop()
+        if parent_id not in nodes:
+            continue
+        for child in nodes[parent_id]:
+            object_nodes[child[0]] = child[1]
+            parent_id_stack.append(child[0])
+        nodes.pop(parent_id)
+
+    return swc.Object(object_nodes)
 
 
 def read_swc(path: str):
@@ -123,5 +148,17 @@ def read_swc(path: str):
             else:
                 nodes[parent_id] = [id_node_pair]
 
-    # TODO: validate that all parent IDs point to valid IDs
-    # TODO: ensure no cycles occur during DFS of all nodes
+    objects = []
+    for root_node in root_nodes:
+        objects.append(compute_object(root_node, nodes))
+
+    if nodes:
+        unreachable_ids = []
+        for parent_id in nodes:
+            for id_node_pair in nodes[parent_id]:
+                unreachable_ids.append(id_node_pair[0])
+        raise SWCFormatError(f"Could not read {path}. The nodes with the"
+                             f" following IDs are unreachable:"
+                             f" {unreachable_ids}")
+
+    return swc.SWC(objects)
