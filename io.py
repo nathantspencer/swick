@@ -93,6 +93,7 @@ def read_swc(path: str):
     :return: an ``SWC`` object containing the loaded data
     """
 
+    # TODO: handle exceptions if file cannot be opened
     swc_file = open(path, 'r')
     nodes = dict()
     root_nodes = []
@@ -162,3 +163,24 @@ def read_swc(path: str):
                              f" {unreachable_ids}")
 
     return swc.SWC(objects)
+
+
+def write_swc(path: str, swc: swc.SWC, delimeter: str = " "):
+    """
+    Writes an SWC object into an ``.swc`` file.
+
+    :parameter path: the path to the ``.swc`` file to be written
+    :parameter swc: the SWC object to be written to a file
+    :parameter delimeter: separator for fields (tabs and spaces only)
+    :return: an ``SWC`` object containing the data to be written
+    """
+
+    # TODO: handle exceptions if file cannot be opened
+
+    if not len(delimeter):
+        raise ValueError(f"Could not write {path}. Delimeter may not be an"
+                         f" empty string.")
+    elif re.sub(r'[\t ]+', '', delimeter) != "":
+        raise ValueError(f"Could not write {path}. Delimeter may only contain"
+                         f" tabs and space, but was specified as"
+                         f" \"{delimeter}\".")
