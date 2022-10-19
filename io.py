@@ -1,7 +1,6 @@
 from . import swc
 
 import re
-from typing import Dict, List, Tuple
 
 
 class SWCFormatError(Exception):
@@ -60,8 +59,8 @@ def parse_float(value: str,  name: str, file_name: str, line_number: int,):
                              f" {value!r}; expected a float.")
 
 
-def compute_object(root_node: Tuple[int, swc.Node],
-                   nodes: Dict[int, List[Tuple[int, swc.Node]]]):
+def compute_object(root_node: tuple[int, swc.Node],
+                   nodes: dict[int, list[tuple[int, swc.Node]]]):
     """
     Beginning at the rode node, searches available nodes in order to construct
     and return an ``Object`` containing all of the nodes connected to the root.
@@ -82,7 +81,8 @@ def compute_object(root_node: Tuple[int, swc.Node],
             parent_id_stack.append(child[0])
         nodes.pop(parent_id)
 
-    return swc.Object(object_nodes)
+    sorted_object_nodes = dict(sorted(object_nodes.items()))
+    return swc.Object(sorted_object_nodes)
 
 
 def read_swc(path: str):
@@ -164,13 +164,16 @@ def read_swc(path: str):
     return swc.SWC(objects)
 
 
-def write_swc(path: str, swc: swc.SWC, delimeter: str = " "):
+def write_swc(path: str, swc: swc.SWC, delimeter: str = " ",
+              decimal_places: int = -1):
     """
     Writes an SWC object into an ``.swc`` file.
 
     :parameter path: the path to the ``.swc`` file to be written
     :parameter swc: the SWC object to be written to a file
     :parameter delimeter: separator for fields (tabs and spaces only)
+    :parameter decimal_places: number of decimal places written for floats; if
+                               -1, uses as many as necessary for each field
     :return: an ``SWC`` object containing the data to be written
     """
 
@@ -184,7 +187,16 @@ def write_swc(path: str, swc: swc.SWC, delimeter: str = " "):
                          f" tabs and space, but was specified as"
                          f" {delimeter!r}.")
 
-    for object in swc.objects:
-        for node in object.nodes:
-            # TODO: write lines
-            pass
+    if decimal_places < -1:
+        raise ValueError(f"Could not write {path}. {decimal_places} is not a"
+                         f" valid value for number of decimal places; expected"
+                         f" a value of -1 or greater.")
+
+    if decimal_places == -1:
+        for object in swc.objects:
+            for id in object.nodes:
+                node = object.nodes[id]
+                swc_file.write(f"{id}{delimeter}{node.type}{delimeter}{node.x}"
+                               f"{delimeter}{node.y}{delimeter}{node.z}"
+                               f"{delimeter}{node.radius}{delimeter}"
+                               f"{node.parent_id}\n")
