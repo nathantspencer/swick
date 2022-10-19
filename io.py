@@ -1,3 +1,4 @@
+from unicodedata import decimal
 from . import swc
 
 import re
@@ -192,11 +193,18 @@ def write_swc(path: str, swc: swc.SWC, delimeter: str = " ",
                          f" valid value for number of decimal places; expected"
                          f" a value of -1 or greater.")
 
-    if decimal_places == -1:
-        for object in swc.objects:
-            for id in object.nodes:
-                node = object.nodes[id]
+    for object in swc.objects:
+        for id in object.nodes:
+            node = object.nodes[id]
+            if decimal_places == -1:
                 swc_file.write(f"{id}{delimeter}{node.type}{delimeter}{node.x}"
                                f"{delimeter}{node.y}{delimeter}{node.z}"
                                f"{delimeter}{node.radius}{delimeter}"
+                               f"{node.parent_id}\n")
+            else:
+                swc_file.write(f"{id}{delimeter}{node.type}{delimeter}"
+                               f"{node.x:.{decimal_places}f}{delimeter}"
+                               f"{node.y:.{decimal_places}f}{delimeter}"
+                               f"{node.z:.{decimal_places}f}{delimeter}"
+                               f"{node.radius:.{decimal_places}f}{delimeter}"
                                f"{node.parent_id}\n")
