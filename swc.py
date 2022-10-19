@@ -1,7 +1,7 @@
 class Node:
     """
     A single node in an SWC structure, which is represented by a single line in
-    the ``.swc.`` file.
+    the ``.swc`` file.
 
     The ``type`` is an integer that corresponds to a enumeration describing
     the structure being represented by the node.
@@ -31,7 +31,7 @@ class Node:
 class Object:
     """
     A group of connected nodes which form a tree structure. For each root node
-    in a given ``.swc`` file, there will be one` ``Object``.
+    in a given ``.swc`` file, there will be one ``Object``.
 
     The ``nodes`` field contains a dictionary mapping a unique ID to each
     ``Node`` in the ``Object``.
@@ -44,10 +44,10 @@ class Object:
 class SWC:
     """
     A representation of the ``.swc`` file, which can contain one or more tree-
-    like structures (``Object``s), each containing some number of connected
-    ``Node``s.
+    like structures (``Object``\s), each containing some number of connected
+    ``Node``\s.
 
-    The ``objects`` field contains a list of these ``Object``s.
+    The ``objects`` field contains a list of these ``Object``\s.
     """
 
     def __init__(self, objects: list[Object]):
