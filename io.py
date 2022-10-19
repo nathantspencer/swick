@@ -36,7 +36,7 @@ def parse_int(value: str,  name: str, min_value: int, file_name: str,
     except (AssertionError, ValueError):
         raise SWCFormatError(f"Could not read {file_name}. Line"
                              f" {line_number} has {name} with value"
-                             f" \"{value}\"; expected an integer"
+                             f" {value!r}; expected an integer"
                              f" greater than {min_value - 1}.")
 
 
@@ -57,7 +57,7 @@ def parse_float(value: str,  name: str, file_name: str, line_number: int,):
     except ValueError:
         raise SWCFormatError(f"Could not read {file_name}. Line"
                              f" {line_number} has {name} with value"
-                             f" \"{value}\"; expected a float.")
+                             f" {value!r}; expected a float.")
 
 
 def compute_object(root_node: Tuple[int, swc.Node],
@@ -93,7 +93,6 @@ def read_swc(path: str):
     :return: an ``SWC`` object containing the loaded data
     """
 
-    # TODO: handle exceptions if file cannot be opened
     swc_file = open(path, 'r')
     nodes = dict()
     root_nodes = []
@@ -183,4 +182,4 @@ def write_swc(path: str, swc: swc.SWC, delimeter: str = " "):
     elif re.sub(r'[\t ]+', '', delimeter) != "":
         raise ValueError(f"Could not write {path}. Delimeter may only contain"
                          f" tabs and space, but was specified as"
-                         f" \"{delimeter}\".")
+                         f" {delimeter!r}.")
