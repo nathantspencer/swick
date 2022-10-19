@@ -174,7 +174,7 @@ def write_swc(path: str, swc: swc.SWC, delimeter: str = " "):
     :return: an ``SWC`` object containing the data to be written
     """
 
-    # TODO: handle exceptions if file cannot be opened
+    swc_file = open(path, 'w')
 
     if not len(delimeter):
         raise ValueError(f"Could not write {path}. Delimeter may not be an"
@@ -183,3 +183,8 @@ def write_swc(path: str, swc: swc.SWC, delimeter: str = " "):
         raise ValueError(f"Could not write {path}. Delimeter may only contain"
                          f" tabs and space, but was specified as"
                          f" {delimeter!r}.")
+
+    for object in swc.objects:
+        for node in object.nodes:
+            # TODO: write lines
+            pass
