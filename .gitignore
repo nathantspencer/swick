@@ -1,4 +1,13 @@
+# Generated python files
 *.pyc
 __pycache__
 
+# Generated Documentation
 docs/build
+
+# Generated Package
+dist
+swick.egg-info
+
+# MacOS-Specific Generated Files
+.DS_Store
