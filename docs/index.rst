@@ -8,6 +8,7 @@ Welcome to the swick docs.
 
 .. automodule:: swick
     :members:
+    :undoc-members:
     :show-inheritance:
 
 .. toctree::
