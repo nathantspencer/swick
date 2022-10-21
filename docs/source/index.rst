@@ -5,7 +5,7 @@ the swick docs
 Do you work with SWC files?
 ---------------------------
 
-If you do, you probably know that even simple tasks—finding a disconnected node, adjusting positions, combining structures—can become a slog.
+If you do, you've probably found that even simple tasks—finding a disconnected node, adjusting positions, combining structures—can become a slog.
 The goal of ``swick`` is to simplify these tasks and make working with SWC files downright fun.
 
 

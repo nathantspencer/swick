@@ -1,12 +1,12 @@
 html[data-theme="light"] {
 	--pst-color-primary: #85548c;
-	--pst-color-secondary: #d67810;
+	--pst-color-secondary: #de8c14;
 	--pst-color-inline-code: var(--pst-color-secondary);
 }
 
 html[data-theme="dark"] {
 	--pst-color-primary: #85548c;
-	--pst-color-secondary: #d67810;
+	--pst-color-secondary: #de8c14;
 	--pst-color-inline-code: var(--pst-color-secondary);
 }
 
