@@ -1,5 +1,6 @@
-from unicodedata import decimal
-from . import swc
+from .node import Node
+from .swc import SWC
+from .object import Object
 
 import re
 
@@ -60,8 +61,8 @@ def parse_float(value: str,  name: str, file_name: str, line_number: int,):
                              f" {value!r}; expected a float.")
 
 
-def compute_object(root_node: tuple[int, swc.Node],
-                   nodes: dict[int, list[tuple[int, swc.Node]]]):
+def compute_object(root_node: tuple[int, Node],
+                   nodes: dict[int, list[tuple[int, Node]]]):
     """
     Beginning at the rode node, searches available nodes in order to construct
     and return an ``Object`` containing all of the nodes connected to the root.
@@ -83,7 +84,7 @@ def compute_object(root_node: tuple[int, swc.Node],
         nodes.pop(parent_id)
 
     sorted_object_nodes = dict(sorted(object_nodes.items()))
-    return swc.Object(sorted_object_nodes)
+    return Object(sorted_object_nodes)
 
 
 def read_swc(path: str):
@@ -137,7 +138,7 @@ def read_swc(path: str):
         else:
             id_line_numbers[id] = line_number
 
-        node = swc.Node(type, x, y, z, radius, parent_id)
+        node = Node(type, x, y, z, radius, parent_id)
         id_node_pair = (id, node)
         is_root = parent_id == -1
 
@@ -162,10 +163,10 @@ def read_swc(path: str):
                              f" following IDs are unreachable:"
                              f" {unreachable_ids}")
 
-    return swc.SWC(objects)
+    return SWC(objects)
 
 
-def write_swc(path: str, swc: swc.SWC, delimeter: str = " ",
+def write_swc(path: str, swc: SWC, delimeter: str = " ",
               decimal_places: int = -1):
     """
     Writes an SWC object into an ``.swc`` file.
