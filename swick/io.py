@@ -174,7 +174,7 @@ def write_swc(path: str, swc: swc.SWC, delimeter: str = " ",
     :parameter swc: the SWC object to be written to a file
     :parameter delimeter: separator for fields (tabs and spaces only)
     :parameter decimal_places: number of decimal places written for floats; if
-                               -1, uses as many as necessary for each field
+                               ``-1``, uses as many as necessary for each field
     :return: an ``SWC`` object containing the data to be written
     """
 
