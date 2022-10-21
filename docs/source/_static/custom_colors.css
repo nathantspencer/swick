@@ -1,0 +1,16 @@
+html[data-theme="light"] {
+	--pst-color-primary: #85548c;
+	--pst-color-secondary: #d67810;
+	--pst-color-inline-code: var(--pst-color-secondary);
+}
+
+html[data-theme="dark"] {
+	--pst-color-primary: #85548c;
+	--pst-color-secondary: #d67810;
+	--pst-color-inline-code: var(--pst-color-secondary);
+}
+
+h1 {
+	color: var(--pst-color-secondary);
+	font-weight: bold;
+}

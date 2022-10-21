@@ -31,8 +31,29 @@ exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'pydata_sphinx_theme'
-html_static_path = ['static']
-html_logo = 'static/logo_cropped.png'
+html_static_path = ['_static']
+html_logo = '_static/logo_cropped.png'
+html_css_files = ['custom_colors.css',]
+html_theme_options = {
+	"favicons": [
+		{
+				"rel": "icon",
+				"sizes": "16x16",
+				"href": "favicon-16x16.png",
+		},
+		{
+				"rel": "icon",
+				"sizes": "32x32",
+				"href": "favicon-32x32.png",
+		},
+		{
+				"rel": "apple-touch-icon",
+				"sizes": "152x152",
+				"href": "apple-touch-icon.png",
+				"color": "#000000",
+		}
+	]
+}
 
 # -- Extension configuration -------------------------------------------------
 extensions = ['sphinx.ext.autodoc']
