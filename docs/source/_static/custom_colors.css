@@ -1,11 +1,11 @@
 html[data-theme="light"] {
-	--pst-color-primary: #85548c;
+	--pst-color-primary: #85648a;
 	--pst-color-secondary: #de8c14;
 	--pst-color-inline-code: var(--pst-color-secondary);
 }
 
 html[data-theme="dark"] {
-	--pst-color-primary: #85548c;
+	--pst-color-primary: #85648a;
 	--pst-color-secondary: #de8c14;
 	--pst-color-inline-code: var(--pst-color-secondary);
 }

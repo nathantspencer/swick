@@ -25,7 +25,7 @@ Let's get started.
 
 To install ``swick``, you'll first need `Python <https://python.org>`_ installed and available.
 
-Once you have Python ready, head on over to the :doc:`installation` section to get started.
+Once you have Python ready, head on over to the :doc:`user_guide/index` to get started.
 
 
 Looking for something specific?
@@ -34,8 +34,8 @@ Looking for something specific?
 .. toctree::
    :maxdepth: 1
 
-   installation
-   api_documentation
+   user_guide/index
+   api_documentation/index
 
 :ref:`genindex`
 
