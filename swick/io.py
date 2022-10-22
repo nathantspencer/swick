@@ -1,6 +1,6 @@
 from .node import Node
+from .tree import Tree
 from .swc import SWC
-from .object import Object
 
 import re
 
@@ -61,30 +61,30 @@ def parse_float(value: str,  name: str, file_name: str, line_number: int,):
                              f" {value!r}; expected a float.")
 
 
-def compute_object(root_node: tuple[int, Node],
+def compute_tree(root_node: tuple[int, Node],
                    nodes: dict[int, list[tuple[int, Node]]]):
     """
     Beginning at the rode node, searches available nodes in order to construct
-    and return an ``Object`` containing all of the nodes connected to the root.
+    and return a ``Tree`` containing all of the nodes connected to the root.
 
     :parameter root_node: an ID-Node pair for the root node
     :parameter nodes: dictionary mapping parent IDs to list of ID-Node pairs
-    :return: an ``Object`` containing all nodes connected to the root
+    :return: a ``Tree`` containing all nodes connected to the root
     """
     parent_id_stack = [root_node[0]]
-    object_nodes = {root_node[0]: root_node[1]}
+    tree_nodes = {root_node[0]: root_node[1]}
 
     while parent_id_stack:
         parent_id = parent_id_stack.pop()
         if parent_id not in nodes:
             continue
         for child in nodes[parent_id]:
-            object_nodes[child[0]] = child[1]
+            tree_nodes[child[0]] = child[1]
             parent_id_stack.append(child[0])
         nodes.pop(parent_id)
 
-    sorted_object_nodes = dict(sorted(object_nodes.items()))
-    return Object(sorted_object_nodes)
+    sorted_tree_nodes = dict(sorted(tree_nodes.items()))
+    return Tree(sorted_tree_nodes)
 
 
 def read_swc(path: str):
@@ -150,9 +150,9 @@ def read_swc(path: str):
             else:
                 nodes[parent_id] = [id_node_pair]
 
-    objects = []
+    trees = []
     for root_node in root_nodes:
-        objects.append(compute_object(root_node, nodes))
+        trees.append(compute_tree(root_node, nodes))
 
     if nodes:
         unreachable_ids = []
@@ -163,7 +163,7 @@ def read_swc(path: str):
                              f" following IDs are unreachable:"
                              f" {unreachable_ids}")
 
-    return SWC(objects)
+    return SWC(trees)
 
 
 def write_swc(path: str, swc: SWC, delimeter: str = " ",
@@ -194,9 +194,9 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
                          f" valid value for number of decimal places; expected"
                          f" a value of -1 or greater.")
 
-    for object in swc.objects:
-        for id in object.nodes:
-            node = object.nodes[id]
+    for tree in swc.trees:
+        for id in tree.nodes:
+            node = tree.nodes[id]
             if decimal_places == -1:
                 swc_file.write(f"{id}{delimeter}{node.type}{delimeter}{node.x}"
                                f"{delimeter}{node.y}{delimeter}{node.z}"

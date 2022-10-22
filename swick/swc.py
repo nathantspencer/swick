@@ -1,14 +1,14 @@
-from .object import Object
+from .tree import Tree
 
 
 class SWC:
     """
-    A representation of the ``.swc`` file, which can contain one or more tree-
-    like structures (``Object``\s), each containing some number of connected
-    ``Node``\s.
+    A representation of the ``.swc`` file, which can contain one or more
+    tree-like structures (``Tree``\s), each containing some number of
+    connected ``Node``\s.
 
-    The ``objects`` field contains a list of these ``Object``\s.
+    The ``trees`` field contains a list of these ``Tree``\s.
     """
 
-    def __init__(self, objects: list[Object]):
-        self.objects = objects
+    def __init__(self, trees: list[Tree]):
+        self.trees = trees

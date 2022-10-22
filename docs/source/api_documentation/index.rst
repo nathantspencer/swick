@@ -10,7 +10,7 @@ API Documentation
 .. toctree::
    :maxdepth: 1
    :caption: Class Reference
-   
+
    node
-   object
+   tree
    swc

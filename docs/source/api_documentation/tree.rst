@@ -1,7 +1,7 @@
-Object
-======
+Tree
+====
 
-.. autoclass:: swick.Object
+.. autoclass:: swick.Tree
     :members:
     :undoc-members:
     :show-inheritance:
