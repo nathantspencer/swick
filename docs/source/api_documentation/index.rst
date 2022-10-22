@@ -14,3 +14,4 @@ API Documentation
    node
    tree
    swc
+   swc_format_error

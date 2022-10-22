@@ -20,7 +20,7 @@ Once you have an SWC file, you can read it into an :doc:`SWC object <../api_docu
 .. note::
   
 	The function :doc:`read_swc() <../api_documentation/io>` doubles as an SWC validator.
-	If the provided SWC file is invalid, an exception will be provided specifying a line number and format issue.
+	If the provided SWC file is invalid, an :doc:`SWCFormatError <../api_documentation/swc_format_error>` will be raised specifying a line number and format issue.
 
 
 Writing an SWC File

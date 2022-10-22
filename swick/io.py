@@ -7,9 +7,8 @@ import re
 
 class SWCFormatError(Exception):
     """
-    Error thrown during reading or writing of ``.swc`` files in
-    cases in which the format is not or cannot be properly
-    adhered to.
+    Exception raised during reading of ``.swc`` files in cases in which the
+    SWC format is not or cannot be properly adhered to.
     """
     pass
 
@@ -17,9 +16,8 @@ class SWCFormatError(Exception):
 def parse_int(value: str,  name: str, min_value: int, file_name: str,
               line_number: int,):
     """
-    Attempts to interpet a given string ``value`` as an integer,
-    returning the integer on success and raising an ``SWCFormatError``
-    on failure.
+    Attempts to interpet a given string ``value`` as an integer, returning the
+    integer on success and raising an ``SWCFormatError`` on failure.
 
     :parameter value: the string value to be parsed
     :parameter name: the name of the field being parsed
@@ -27,6 +25,7 @@ def parse_int(value: str,  name: str, min_value: int, file_name: str,
     :parameter file_name: the name of the file being read
     :parameter line_number: the line where the value occurs
     :return: an integer interpretation of the value
+    :raises SWCFormatError: if ``value`` is not a valid integer
     """
 
     try:
@@ -51,6 +50,7 @@ def parse_float(value: str,  name: str, file_name: str, line_number: int,):
     :parameter file_name: the name of the file being read
     :parameter line_number: the line where the value occurs
     :return: a float interpretation of the value
+    :raises SWCFormatError: if ``value`` is not a float
     """
 
     try:
@@ -93,6 +93,7 @@ def read_swc(path: str):
 
     :parameter path: the path to the ``.swc`` file to be read
     :return: an ``SWC`` object containing the loaded data
+    :raises SWCFormatError: if the file does not adhere to the SWC format
     """
 
     swc_file = open(path, 'r')
@@ -177,6 +178,8 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
     :parameter decimal_places: number of decimal places written for floats; if
                                ``-1``, uses as many as necessary for each field
     :return: an ``SWC`` object containing the data to be written
+    :raises ValueError: if ``delimeter`` or ``decimal_places`` values are
+                        invalid
     """
 
     swc_file = open(path, 'w')
