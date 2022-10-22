@@ -62,7 +62,7 @@ def parse_float(value: str,  name: str, file_name: str, line_number: int,):
 
 
 def compute_tree(root_node: tuple[int, Node],
-                   nodes: dict[int, list[tuple[int, Node]]]):
+                 nodes: dict[int, list[tuple[int, Node]]]):
     """
     Beginning at the rode node, searches available nodes in order to construct
     and return a ``Tree`` containing all of the nodes connected to the root.
