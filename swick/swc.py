@@ -7,7 +7,8 @@ class SWC:
     tree-like structures (``Tree``\s), each containing some number of connected
     ``Node``\s.
 
-    The ``trees`` field contains a list of these ``Tree``\s.
+    :param trees:
+        a ``list`` of the ``Tree``\s belonging to this ``SWC``
     """
 
     def __init__(self, trees: list[Tree]):

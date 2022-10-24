@@ -201,7 +201,7 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
     :parameter path:
         the path to the ``.swc`` file to be written
     :parameter swc:
-        the SWC object to be written to a file
+        the ``SWC`` object to be written to a file
     :parameter delimeter:
         separator for fields (tabs and spaces only)
     :parameter decimal_places:
