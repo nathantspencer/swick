@@ -7,8 +7,8 @@ import re
 
 class SWCFormatError(Exception):
     """
-    Exception raised during reading of ``.swc`` files in cases in which the
-    SWC format is not or cannot be properly adhered to.
+    Exception raised during reading of ``.swc`` files in cases in which the SWC
+    format is not or cannot be properly adhered to.
     """
     pass
 
@@ -19,13 +19,22 @@ def parse_int(value: str,  name: str, min_value: int, file_name: str,
     Attempts to interpet a given string ``value`` as an integer, returning the
     integer on success and raising an ``SWCFormatError`` on failure.
 
-    :parameter value: the string value to be parsed
-    :parameter name: the name of the field being parsed
-    :parameter min_value: minimum valid integer value
-    :parameter file_name: the name of the file being read
-    :parameter line_number: the line where the value occurs
-    :return: an integer interpretation of the value
-    :raises SWCFormatError: if ``value`` is not a valid integer
+    :parameter value:
+        the string value to be parsed
+    :parameter name:
+        the name of the field being parsed
+    :parameter min_value:
+        minimum valid integer value
+    :parameter file_name:
+        the name of the file being read
+    :parameter line_number:
+        the line where the value occurs
+
+    :return:
+        an integer interpretation of the value
+
+    :raises SWCFormatError:
+        if ``value`` is not a valid integer
     """
 
     try:
@@ -45,12 +54,20 @@ def parse_float(value: str,  name: str, file_name: str, line_number: int,):
     Attempts to interpet a given string ``value`` as a float, returning the
     float on success and raising an ``SWCFormatError`` on failure.
 
-    :parameter value: the string value to be parsed
-    :parameter name: the name of the field being parsed
-    :parameter file_name: the name of the file being read
-    :parameter line_number: the line where the value occurs
-    :return: a float interpretation of the value
-    :raises SWCFormatError: if ``value`` is not a float
+    :parameter value:
+        the string value to be parsed
+    :parameter name:
+        the name of the field being parsed
+    :parameter file_name:
+        the name of the file being read
+    :parameter line_number:
+        the line where the value occurs
+
+    :return:
+        a float interpretation of the value
+
+    :raises SWCFormatError:
+        if ``value`` is not a float
     """
 
     try:
@@ -67,9 +84,13 @@ def compute_tree(root_node: tuple[int, Node],
     Beginning at the rode node, searches available nodes in order to construct
     and return a ``Tree`` containing all of the nodes connected to the root.
 
-    :parameter root_node: an ID-Node pair for the root node
-    :parameter nodes: dictionary mapping parent IDs to list of ID-Node pairs
-    :return: a ``Tree`` containing all nodes connected to the root
+    :parameter root_node:
+        an ID-Node pair for the root node
+    :parameter nodes:
+        dictionary mapping parent IDs to list of ID-Node pairs
+
+    :return:
+        a ``Tree`` containing all nodes connected to the root
     """
     parent_id_stack = [root_node[0]]
     tree_nodes = {root_node[0]: root_node[1]}
@@ -91,9 +112,14 @@ def read_swc(path: str):
     """
     Reads an ``.swc`` file to create and return an ``SWC`` object.
 
-    :parameter path: the path to the ``.swc`` file to be read
-    :return: an ``SWC`` object containing the loaded data
-    :raises SWCFormatError: if the file does not adhere to the SWC format
+    :parameter path:
+        the path to the ``.swc`` file to be read
+
+    :return:
+        an ``SWC`` object containing the loaded data
+
+    :raises SWCFormatError:
+        if the file does not adhere to the SWC format
     """
 
     swc_file = open(path, 'r')
@@ -172,14 +198,21 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
     """
     Writes an SWC object into an ``.swc`` file.
 
-    :parameter path: the path to the ``.swc`` file to be written
-    :parameter swc: the SWC object to be written to a file
-    :parameter delimeter: separator for fields (tabs and spaces only)
-    :parameter decimal_places: number of decimal places written for floats; if
-                               ``-1``, uses as many as necessary for each field
-    :return: an ``SWC`` object containing the data to be written
-    :raises ValueError: if ``delimeter`` or ``decimal_places`` values are
-                        invalid
+    :parameter path:
+        the path to the ``.swc`` file to be written
+    :parameter swc:
+        the SWC object to be written to a file
+    :parameter delimeter:
+        separator for fields (tabs and spaces only)
+    :parameter decimal_places:
+        number of decimal places written for floats; if ``-1``, uses as many as
+        necessary for each field
+
+    :return:
+        an ``SWC`` object containing the data to be written
+
+    :raises ValueError:
+        if ``delimeter`` or ``decimal_places`` values are invalid
     """
 
     swc_file = open(path, 'w')
