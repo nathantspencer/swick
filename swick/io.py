@@ -213,6 +213,9 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
 
     :raises ValueError:
         if ``delimeter`` or ``decimal_places`` values are invalid
+
+    :raises SWCFormatError:
+        if the ``SWC`` object is invalid
     """
 
     swc_file = open(path, 'w')
@@ -230,9 +233,35 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
                          f" valid value for number of decimal places; expected"
                          f" a value of -1 or greater.")
 
+    node_ids_written = set()
     for tree in swc.trees:
+        has_written_root = False
         for id in tree.nodes:
+
+            # check for duplicate node IDs
+            if id in node_ids_written:
+                raise SWCFormatError(f"Could not write {path}. The node ID "
+                                     f"{id} occurs more than once; node IDs "
+                                     f"are required to be unique.")
+            else:
+                node_ids_written.add(id)
             node = tree.nodes[id]
+
+            # check for self-referential parent IDs
+            if id == node.parent_id:
+                raise SWCFormatError(f"Could not write {path}. A node with ID "
+                                     f"{id} refers to itself as the parent. "
+                                     f"Root nodes must use parent ID -1.")
+
+            # check for multiple root notes in a single tree
+            if node.parent_id == -1:
+                if has_written_root:
+                    raise SWCFormatError(f"Could not write {path}. A tree "
+                                         f"contains multiple nodes with parent"
+                                         f" ID -1; trees must contain exactly "
+                                         f"one root node.")
+                has_written_root = True
+
             if decimal_places == -1:
                 swc_file.write(f"{id}{delimeter}{node.type}{delimeter}{node.x}"
                                f"{delimeter}{node.y}{delimeter}{node.z}"
@@ -245,3 +274,9 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
                                f"{node.z:.{decimal_places}f}{delimeter}"
                                f"{node.radius:.{decimal_places}f}{delimeter}"
                                f"{node.parent_id}\n")
+
+        # check for missing root node
+        if not has_written_root:
+            raise SWCFormatError(f"Could not write {path}. A tree contains no"
+                                 f" nodes with parent ID -1; trees must "
+                                 f"contain exactly one root node.")
