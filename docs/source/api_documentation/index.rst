@@ -6,6 +6,7 @@ API Documentation
    :caption: Function Reference
 
    io
+   utils
 
 .. toctree::
    :maxdepth: 1

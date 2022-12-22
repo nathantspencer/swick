@@ -28,3 +28,11 @@ class SWC:
         for tree in self.trees:
             total_length += tree.total_length()
         return total_length
+
+    def condense_node_ids(self):
+        r"""
+        Modifies the IDs of the ``Node``\s contained by this ``SWC`` such that
+        they form a contiguous series of natural numbers beginning at 1.
+        """
+
+        # TODO

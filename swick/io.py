@@ -196,7 +196,7 @@ def read_swc(path: str):
 def write_swc(path: str, swc: SWC, delimeter: str = " ",
               decimal_places: int = -1):
     """
-    Writes an SWC object into an ``.swc`` file.
+    Writes an ``SWC`` object into an ``.swc`` file.
 
     :parameter path:
         the path to the ``.swc`` file to be written
