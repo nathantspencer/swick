@@ -39,4 +39,4 @@ Let's expand on the above example to read an SWC file again, but this time to al
   swick.write_swc('path/to/new_copy.swc', my_swc)
 
 Obviously making copies of files is not a problem in need of solving.
-The real fun of ``swick`` is in analyzing or modifying the SWC in between reading and writing; features we'll begin to explore in the next sections.
+The real fun of ``swick`` is in analyzing or modifying the SWC in between reading and writing: features we'll begin to explore in the next sections.

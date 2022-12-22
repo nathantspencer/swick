@@ -12,3 +12,4 @@ Just click one of the links below to get started:
 
    installation
    reading_and_writing_swc_files
+   the_structure_of_an_swc
