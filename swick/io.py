@@ -14,7 +14,7 @@ class SWCFormatError(Exception):
 
 
 def parse_int(value: str,  name: str, min_value: int, file_name: str,
-              line_number: int,):
+              line_number: int):
     """
     Attempts to interpet a given string ``value`` as an integer, returning the
     integer on success and raising an ``SWCFormatError`` on failure.
@@ -49,7 +49,7 @@ def parse_int(value: str,  name: str, min_value: int, file_name: str,
                              f" greater than {min_value - 1}.")
 
 
-def parse_float(value: str,  name: str, file_name: str, line_number: int,):
+def parse_float(value: str,  name: str, file_name: str, line_number: int):
     """
     Attempts to interpet a given string ``value`` as a float, returning the
     float on success and raising an ``SWCFormatError`` on failure.
