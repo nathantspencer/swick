@@ -6,8 +6,7 @@ from .swc import SWC
 def split_swc(swc: SWC):
     """
     Splits an ``SWC`` object into one or more ``SWC`` objects, each containing
-    a single tree, i.e. a single root node. Node IDs are not modified by this
-    process.
+    a single tree. Node IDs are not modified by this process.
 
     :parameter swc:
         the ``SWC`` object to be split
@@ -16,8 +15,10 @@ def split_swc(swc: SWC):
         a list of ``SWC`` objects each containing one tree
     """
 
-    # TODO
-    return 0
+    result = []
+    for tree in swc.trees:
+        result.append(SWC([tree]))
+    return result
 
 
 def combine_swcs(swcs: list[SWC]):
@@ -26,7 +27,7 @@ def combine_swcs(swcs: list[SWC]):
     Node IDs for all but the first ``SWC`` in the list may be modified by
     this process in order to avoid collisions between node IDs: for each
     ``SWC`` in the list, the node IDs it contains will be offset by the
-    greatest node ID in the previous ``SWC``. 
+    greatest node ID in the previous ``SWC``.
 
     :parameter swcs:
         a list of ``SWC`` objects to be combined
@@ -34,6 +35,18 @@ def combine_swcs(swcs: list[SWC]):
     :return:
         a single ``SWC`` object containing all ``Tree``\s from the input
     """
-		
-    # TODO
-    return 0
+
+    trees = []
+    id_offset = 0
+    highest_id = 0
+    for swc in swcs:
+        for tree in swc.trees:
+            new_tree = {}
+            for id in tree.nodes:
+                new_tree[id + id_offset] = tree.nodes[id]
+                if id + id_offset > highest_id:
+                    highest_id = id + id_offset
+            trees.append(new_tree)
+        id_offset = highest_id
+    result = SWC(trees)
+    return result
