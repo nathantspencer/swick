@@ -32,7 +32,16 @@ class SWC:
     def condense_node_ids(self):
         r"""
         Modifies the IDs of the ``Node``\s contained by this ``SWC`` such that
-        they form a contiguous series of natural numbers beginning at 1.
+        they form a contiguous series of natural numbers beginning at 1. The
+        IDs will be contiguous for each tree, such that the least ID in the
+        second tree will always be greater than the greatest ID in the first
+        tree.
         """
 
-        # TODO
+        next_id = 1
+        for tree in self.trees:
+            new_nodes = {}
+            for id in tree.nodes:
+                new_nodes[next_id] = tree.nodes[id]
+                next_id = next_id + 1
+            tree.nodes = new_nodes
