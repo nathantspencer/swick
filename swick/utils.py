@@ -41,12 +41,25 @@ def combine_swcs(swcs: list[SWC]):
     highest_id = 0
     for swc in swcs:
         for tree in swc.trees:
-            new_tree = {}
+            old_id_to_new_id = {}
+            new_tree_nodes = {}
+
+            # first pass to create mapping from old to new IDs
             for id in tree.nodes:
-                new_tree[id + id_offset] = tree.nodes[id]
-                if id + id_offset > highest_id:
-                    highest_id = id + id_offset
-            trees.append(new_tree)
+                new_id = id + id_offset
+                old_id_to_new_id[id] = new_id
+                if new_id > highest_id:
+                    highest_id = new_id
+
+            # second pass to create modified copies of existing nodes
+            for id in tree.nodes:
+                new_id = old_id_to_new_id[id]
+                if tree.nodes[id].parent_id != -1:
+                    new_parent_id = old_id_to_new_id[tree.nodes[id].parent_id]
+                    tree.nodes[id].parent_id = new_parent_id
+                new_tree_nodes[new_id] = tree.nodes[id]
+
+            trees.append(Tree(new_tree_nodes))
         id_offset = highest_id
     result = SWC(trees)
     return result

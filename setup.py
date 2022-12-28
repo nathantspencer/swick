@@ -7,7 +7,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     
 setup(
     name="swick",
-    version="0.1",
+    version="0.23",
     description="The slick way to process SWC files.",
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -24,5 +24,3 @@ setup(
         'Development Status :: 3 - Alpha'
     ]
 )
-
-
