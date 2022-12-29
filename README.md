@@ -5,7 +5,7 @@ Reading, writing, combining, splitting, and validating SWC files can be done in 
 
 # Installation
 
-To install `swick` via `pip`, simply:
+To install `swick` via [pip](https://pip.pypa.io/en/stable/), simply:
 
 ```
 pip install swick
