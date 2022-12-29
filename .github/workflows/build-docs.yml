@@ -27,23 +27,12 @@ jobs:
       - name: Sphinx build
         working-directory: ./docs
         run: ./make.bat html
-        
-      # Compress/archive to .tar.gz
-      - name: Arhive and compress documentation
-        uses: a7ul/tar-action@v1.1.0
-        id: compress
-        with:
-          command: c
-          cwd: .
-          files: |
-            ./docs/build/html
-          outPath: github-pages.tar.gz
       
-      # Upload documentation as artifact for deployment step
-      - uses: actions/upload-artifact@v3
+      # Upload documentation as artifact
+      - name: Upload documentation artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          name: github-pages
-          path: github-pages.tar.gz
+          path: .docs/build/html
           
   deploy:
     runs-on: windows-latest
