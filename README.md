@@ -19,4 +19,10 @@ pip install swick --upgrade
 
 # Documentation
 
-Full documentation of `swick` including a user guide and API reference will be linked here shortly.
+Documentation is automatically built via a [Github Actions workflow](.github/workflows/build-docs.yml) and hosted on Github Pages.
+
+Here are some links to relevant documentation:
+
+ - [Documentation Homepage](https://nathantspencer.github.io/swick/index.html)
+ - [User Guide](https://nathantspencer.github.io/swick/user_guide/index.html)
+ - [API Reference](https://nathantspencer.github.io/swick/api_documentation/index.html)
