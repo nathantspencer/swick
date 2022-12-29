@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Sphinx
-        run: pip install sphinx
+        run: pip install sphinx==5.3.0
       - name: Install theme
         run: pip install pydata-sphinx-theme
       - name: Sphinx build
