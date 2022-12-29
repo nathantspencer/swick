@@ -17,9 +17,9 @@ Or to upgrade an existing installation:
 pip install swick --upgrade
 ```
 
-# Documentation
+# Usage & Documentation
 
-Documentation is automatically built via a [Github Actions workflow](.github/workflows/build-docs.yml) and hosted on Github Pages.
+Documentation is automatically built via a [Github Actions workflow](.github/workflows/build-docs.yml) and hosted on Github Pages. Reading it is the best way to get started with `swick`. For any questions not addressed there, please feel free to [open an issue](https://github.com/nathantspencer/swick/issues/new)!
 
 Here are some links to relevant documentation:
 
