@@ -230,6 +230,8 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
         if the ``SWC`` object is invalid
     """
 
+    # TODO: consider wrapping entire impl in a finally
+    #       that is guaranteed to close the file
     swc_file = open(path, 'w')
 
     if not len(delimeter):
