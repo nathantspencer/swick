@@ -16,8 +16,12 @@ jobs:
         run: pip install sphinx
       - name: Install theme
         run: pip install pydata-sphinx-theme
+      - name: Change to docs directory
+        run: cd docs
       - name: Sphinx build
-        run: docs/make.bat html
+        run: make.bat html
+      - name: Change to root directory
+        run: cd ..
       - uses: actions/upload-artifact@v3
         with:
           name: github-pages
