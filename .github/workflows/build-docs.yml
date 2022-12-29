@@ -1,7 +1,6 @@
 name: Build Documentation
 
 on:
-
   # Trigger on push or merge to main, or manually
   push:
     branches: [ "main" ]
@@ -13,7 +12,6 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      
       # Checkout branch
       - uses: actions/checkout@v3
       
@@ -32,7 +30,7 @@ jobs:
       - name: Upload documentation artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: .docs/build/html
+          path: ./docs/build/html
           
   deploy:
     runs-on: windows-latest
