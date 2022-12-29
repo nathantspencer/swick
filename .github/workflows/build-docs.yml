@@ -18,7 +18,7 @@ jobs:
         run: pip install pydata-sphinx-theme
       - name: Sphinx build
         working-directory: ./docs
-        run: make.bat html
+        run: ./make.bat html
       - uses: actions/upload-artifact@v3
         with:
           name: github-pages
