@@ -16,7 +16,7 @@ In this example we'll read an SWC and print the number of trees it contains: ::
 
   my_swc = swick.read_swc('path/to/swc_file.swc')
   
-  print(len(swick.trees))
+  print(len(my_swc.trees))
 
 Each tree contains a dictionary mapping IDs to :doc:`Node objects <../api_documentation/node>`.
 These nodes describe the 3D points that make up the tree, their radii and type specifiers, and the connection to their parent node (except in the case of a root node).
