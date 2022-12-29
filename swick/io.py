@@ -122,6 +122,8 @@ def read_swc(path: str):
         if the file does not adhere to the SWC format
     """
 
+    # TODO: consider wrapping entire impl in a finally
+    #       that is guaranteed to close the file
     swc_file = open(path, 'r')
     nodes = dict()
     root_nodes = []
@@ -138,26 +140,34 @@ def read_swc(path: str):
 
         fields = re.split(r'[\t ]+', line)
         if len(fields) != 7:
+            swc_file.close()
             raise SWCFormatError(f"Could not read {path}. Line"
                                  f" {line_number} contains"
                                  f" {len(fields)} fields;"
                                  f" expected 7 fields.")
 
-        id = parse_int(fields[0], "ID", 1, path, line_number)
-        type = parse_int(fields[1], "type", 0, path, line_number)
-        x = parse_float(fields[2], "x position", path, line_number)
-        y = parse_float(fields[3], "y position", path, line_number)
-        z = parse_float(fields[4], "z position", path, line_number)
-        radius = parse_float(fields[5], "radius", path, line_number)
-        parent_id = parse_int(fields[6], "parent ID", -1, path, line_number)
+        try:
+            id = parse_int(fields[0], "ID", 1, path, line_number)
+            type = parse_int(fields[1], "type", 0, path, line_number)
+            x = parse_float(fields[2], "x position", path, line_number)
+            y = parse_float(fields[3], "y position", path, line_number)
+            z = parse_float(fields[4], "z position", path, line_number)
+            radius = parse_float(fields[5], "radius", path, line_number)
+            parent_id = parse_int(fields[6], "parent ID", -1, path,
+                                  line_number)
+        except SWCFormatError as format_error:
+            swc_file.close()
+            raise format_error
 
         if parent_id == id:
+            swc_file.close()
             raise SWCFormatError(f"Could not read {path}. Line"
                                  f" {line_number} refers to itself as the"
                                  f" parent. Root nodes should use parent ID"
                                  f" -1.")
 
         if id in id_line_numbers:
+            swc_file.close()
             raise SWCFormatError(f"Could not read {path}. Line"
                                  f" {line_number} contains an ID {id}"
                                  f" which already exists on line"
@@ -186,10 +196,12 @@ def read_swc(path: str):
         for parent_id in nodes:
             for id_node_pair in nodes[parent_id]:
                 unreachable_ids.append(id_node_pair[0])
+        swc_file.close()
         raise SWCFormatError(f"Could not read {path}. The nodes with the"
                              f" following IDs are unreachable:"
                              f" {unreachable_ids}")
 
+    swc_file.close()
     return SWC(trees)
 
 

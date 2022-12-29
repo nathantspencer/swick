@@ -26,3 +26,13 @@ Here are some links to relevant documentation:
  - [Documentation Homepage](https://nathantspencer.github.io/swick/index.html)
  - [User Guide](https://nathantspencer.github.io/swick/user_guide/index.html)
  - [API Reference](https://nathantspencer.github.io/swick/api_documentation/index.html)
+
+# Testing
+
+Tests can be run via this command from the root directory of the repository:
+
+```
+python -m unittest discover
+```
+
+In the near future, tests will be automated via Github Actions in order to evaluate pull requests as well as the current head of the `main` branch.
