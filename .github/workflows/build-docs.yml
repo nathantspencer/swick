@@ -1,6 +1,8 @@
 name: Build Documentation
 
 on:
+
+  # Trigger on push or merge to main, or manually
   push:
     branches: [ "main" ]
   pull_request:
@@ -11,18 +13,37 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
+      
+      # Checkout branch
       - uses: actions/checkout@v3
+      
+      # Install Sphinx and Sphinx theme
       - name: Install Sphinx
         run: pip install sphinx==5.3.0
       - name: Install theme
         run: pip install pydata-sphinx-theme
+        
+      # Build docs using Sphinx
       - name: Sphinx build
         working-directory: ./docs
         run: ./make.bat html
+        
+      # Compress/archive to .tar.gz
+      - name: Arhive and compress documentation
+        uses: a7ul/tar-action@v1.1.0
+        id: compress
+        with:
+          command: c
+          cwd: .
+          files: |
+            ./docs/build/html
+          outPath: github-pages.tar.gz
+      
+      # Upload documentation as artifact for deployment step
       - uses: actions/upload-artifact@v3
         with:
           name: github-pages
-          path: docs/build/html
+          path: github-pages.tar.gz
           
   deploy:
     runs-on: windows-latest
