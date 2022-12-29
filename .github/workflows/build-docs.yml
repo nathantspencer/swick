@@ -9,19 +9,22 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ammaraskar/sphinx-action@master
-        with:
-          docs-folder: "docs/"
+      - name: Install Sphinx
+        run: pip install sphinx
+      - name: Install theme
+        run: pip install pydata-sphinx-theme
+      - name: Sphinx build
+        run: docs/make.bat html
       - uses: actions/upload-artifact@v3
         with:
           name: github-pages
           path: docs/build/html
           
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
     permissions:
       pages: write      # to deploy to Pages
