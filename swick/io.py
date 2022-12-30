@@ -122,8 +122,7 @@ def read_swc(path: str):
         if the file does not adhere to the SWC format
     """
 
-    # TODO: consider wrapping entire impl in a finally
-    #       that is guaranteed to close the file
+    # TODO: use with to avoid unclosed files in case of exception thrown
     swc_file = open(path, 'r')
     nodes = dict()
     root_nodes = []
@@ -133,6 +132,7 @@ def read_swc(path: str):
     for line in swc_file:
         line_number = line_number + 1
 
+        # TODO: consider capturing comments
         # ignore empty, white-space only, and comment lines
         line = line.strip()
         if not line or line.startswith('#'):
@@ -230,8 +230,7 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
         if the ``SWC`` object is invalid
     """
 
-    # TODO: consider wrapping entire impl in a finally
-    #       that is guaranteed to close the file
+    # TODO: use with to avoid unclosed files in case of exception thrown
     swc_file = open(path, 'w')
 
     if not len(delimeter):
