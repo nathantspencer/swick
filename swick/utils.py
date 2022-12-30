@@ -5,16 +5,48 @@ from .swc import SWC
 def split_swc(swc: SWC):
     """
     Splits an ``SWC`` object into one or more ``SWC`` objects, each containing
-    a single tree. Node IDs are not modified by this process.
+    a single root node. Node IDs are not modified by this process.
 
     :parameter swc:
         the ``SWC`` object to be split
 
     :return:
-        a list of ``SWC`` objects each containing one tree
+        a list of ``SWC`` objects each containing one root node
     """
 
-    # TODO: reimplement using old compute_trees() function from IO
+    # first pass to create map from parent ID to child IDs
+    root_nodes = []
+    parent_id_to_child_ids = {}
+    for id in swc.nodes:
+        parent_id = swc.nodes[id].parent_id
+        if parent_id == -1:
+            root_nodes.append(id)
+        elif parent_id in parent_id_to_child_ids:
+            parent_id_to_child_ids[parent_id].append(id)
+        else:
+            parent_id_to_child_ids[parent_id] = [id]
+
+    # second pass using DFS to separate connected components
+    swcs = []
+    for root_id in root_nodes:
+        parent_id_stack = [root_id]
+        nodes = {root_id : root_nodes[root_id]}
+
+        while parent_id_stack:
+            parent_id = parent_id_stack.pop()
+            if parent_id not in parent_id_to_child_ids:
+                continue
+            for child_id in parent_id_to_child_ids[parent_id]:
+                nodes[child_id] = swc.nodes[child_id]
+                parent_id_stack.append(child_id)
+            nodes.pop(parent_id)
+
+        swcs.append(SWC(nodes))
+
+    # TODO: if anything is left in nodes, throw exception for unreachable nodes
+    # add exception to documentation
+
+    return swcs
 
 
 def combine_swcs(swcs: list[SWC]):
