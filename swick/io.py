@@ -6,7 +6,7 @@ import re
 
 class SWCFormatError(Exception):
     """
-    Exception raised during reading of ``.swc`` files in cases in which the SWC
+    Exception raised during  ``.swc`` file I/O in cases in which the SWC
     format is not or cannot be properly adhered to.
     """
     pass

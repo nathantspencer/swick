@@ -39,12 +39,9 @@ def split_swc(swc: SWC):
             for child_id in parent_id_to_child_ids[parent_id]:
                 nodes[child_id] = swc.nodes[child_id]
                 parent_id_stack.append(child_id)
-            nodes.pop(parent_id)
+            parent_id_to_child_ids.pop(parent_id)
 
         swcs.append(SWC(nodes))
-
-    # TODO: if anything is left in nodes, throw exception for unreachable nodes
-    # add exception to documentation
 
     return swcs
 
