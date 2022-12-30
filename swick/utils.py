@@ -30,7 +30,7 @@ def split_swc(swc: SWC):
     swcs = []
     for root_id in root_nodes:
         parent_id_stack = [root_id]
-        nodes = {root_id : root_nodes[root_id]}
+        nodes = {root_id: root_nodes[root_id]}
 
         while parent_id_stack:
             parent_id = parent_id_stack.pop()
@@ -61,7 +61,31 @@ def combine_swcs(swcs: list[SWC]):
         a list of ``SWC`` objects to be combined
 
     :return:
-        a single ``SWC`` object containing all ``Tree``\s from the input
+        a single ``SWC`` object containing all ``Node``\s from the input
     """
 
-    # TODO: reimplement
+    id_offset = 0
+    highest_id = 0
+    new_nodes = {}
+
+    for swc in swcs:
+
+        # first pass to create mapping from old to new IDs
+        old_id_to_new_id = {}
+        for id in swc.nodes:
+            new_id = id + id_offset
+            old_id_to_new_id[id] = new_id
+            if new_id > highest_id:
+                highest_id = new_id
+
+        # second pass to create modified copies of existing nodes
+        for id in swc.nodes:
+            new_id = old_id_to_new_id[id]
+            if swc.nodes[id].parent_id != -1:
+                new_parent_id = old_id_to_new_id[swc.nodes[id].parent_id]
+                swc.nodes[id].parent_id = new_parent_id
+            new_nodes[new_id] = swc.nodes[id]
+
+        id_offset = highest_id
+
+    return SWC(nodes)
