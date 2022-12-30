@@ -13,6 +13,5 @@ API Documentation
    :caption: Class Reference
 
    node
-   tree
    swc
    swc_format_error
