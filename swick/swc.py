@@ -1,47 +1,64 @@
-from .tree import Tree
+from .node import Node
+
+import math
 
 
 class SWC:
     r"""
-    A representation of the ``.swc`` file, which can contain one or more
-    tree-like structures (``Tree``\s), each containing some number of connected
-    ``Node``\s.
+    A representation of the ``.swc`` file, which contains a mapping from node
+    IDs to ``Node`` objects.
 
-    :param trees:
-        a ``list`` of the ``Tree``\s belonging to this ``SWC``
+    :param nodes:
+        a ``dict`` mapping IDs to the ``Node``\s belonging to this ``SWC``
     """
 
-    def __init__(self, trees: list[Tree]):
-        self.trees = trees
+    def __init__(self, nodes: dict[int, Node]):
+        self.node = nodes
 
     def total_length(self):
         """
         Calculates and returns the sum of the Euclidean distances between each
-        pair of connected nodes in each of the trees owned by this ``SWC``.
+        pair of connected nodes in this ``SWC``.
 
         :return:
             the sum of the distances between each pair of connected nodes in
-            each tree
+            this ``SWC``
         """
 
         total_length = 0.0
-        for tree in self.trees:
-            total_length += tree.total_length()
+        for node in self.nodes.values():
+            if node.parent_id == -1:
+                continue
+            parent = self.nodes[node.parent_id]
+            node_position = [node.x, node.y, node.z]
+            parent_position = [parent.x, parent.y, parent.z]
+            total_length += math.dist(node_position, parent_position)
         return total_length
 
     def condense_node_ids(self):
         r"""
         Modifies the IDs of the ``Node``\s contained by this ``SWC`` such that
-        they form a contiguous series of natural numbers beginning at 1. The
-        IDs will be contiguous for each tree, such that the least ID in the
-        second tree will always be greater than the greatest ID in the first
-        tree.
+        they form a contiguous series of natural numbers beginning at 1.
+        The order of node IDs will not change, i.e. a node ID that is greater
+        than another given node ID prior to this operation will still be
+        greater afterwards.
         """
 
         next_id = 1
-        for tree in self.trees:
-            new_nodes = {}
-            for id in tree.nodes:
-                new_nodes[next_id] = tree.nodes[id]
-                next_id = next_id + 1
-            tree.nodes = new_nodes
+        old_id_to_new_id = {}
+        new_nodes = {}
+
+        # first pass to create mapping from old to new IDs
+        for id in self.nodes:
+            old_id_to_new_id[id] = next_id
+            next_id += 1
+
+        # second pass to create modified copies of existing nodes
+        for id in self.nodes:
+            if self.nodes[id].parent_id != -1:
+                new_parent_id = old_id_to_new_id[self.nodes[id].parent_id]
+                self.nodes[id].parent_id = new_parent_id
+            new_id = old_id_to_new_id[id]
+            new_nodes[new_id] = self.nodes[id]
+        
+        self.nodes = new_nodes
