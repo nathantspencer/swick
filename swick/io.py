@@ -108,9 +108,9 @@ def read_swc(path: str):
             fields = re.split(r'[\t ]+', line)
             if len(fields) != 7:
                 raise SWCFormatError(f"Could not read {path}. Line"
-                                    f" {line_number} contains"
-                                    f" {len(fields)} fields;"
-                                    f" expected 7 fields.")
+                                     f" {line_number} contains"
+                                     f" {len(fields)} fields;"
+                                     f" expected 7 fields.")
 
             id = parse_int(fields[0], "ID", 1, path, line_number)
             type = parse_int(fields[1], "type", 0, path, line_number)
@@ -123,15 +123,15 @@ def read_swc(path: str):
 
             if parent_id == id:
                 raise SWCFormatError(f"Could not read {path}. Line"
-                                    f" {line_number} refers to itself as the"
-                                    f" parent. Root nodes should use parent ID"
-                                    f" -1.")
+                                     f" {line_number} refers to itself as the"
+                                     f" parent. Root nodes should use parent "
+                                     f"ID -1.")
 
             if id in id_line_numbers:
                 raise SWCFormatError(f"Could not read {path}. Line"
-                                    f" {line_number} contains an ID {id}"
-                                    f" which already exists on line"
-                                    f" {id_line_numbers[id]}.")
+                                     f" {line_number} contains an ID {id}"
+                                     f" which already exists on line"
+                                     f" {id_line_numbers[id]}.")
             else:
                 id_line_numbers[id] = line_number
 
@@ -172,9 +172,6 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
         if the ``SWC`` object is invalid
     """
 
-    # TODO: use with to avoid unclosed files in case of exception thrown
-    swc_file = open(path, 'w')
-
     if not len(delimeter):
         raise ValueError(f"Could not write {path}. Delimeter may not be an"
                          f" empty string.")
@@ -188,19 +185,10 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
                          f" valid value for number of decimal places; expected"
                          f" a value of -1 or greater.")
 
-    node_ids_written = set()
-    for tree in swc.trees:
+    with open(path, 'w') as swc_file:
         has_written_root = False
-        for id in tree.nodes:
-
-            # check for duplicate node IDs
-            if id in node_ids_written:
-                raise SWCFormatError(f"Could not write {path}. The node ID "
-                                     f"{id} occurs more than once; node IDs "
-                                     f"are required to be unique.")
-            else:
-                node_ids_written.add(id)
-            node = tree.nodes[id]
+        for id in swc.nodes:
+            node = swc.nodes[id]
 
             # check for self-referential parent IDs
             if id == node.parent_id:
@@ -208,13 +196,7 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
                                      f"{id} refers to itself as the parent. "
                                      f"Root nodes must use parent ID -1.")
 
-            # check for multiple root notes in a single tree
             if node.parent_id == -1:
-                if has_written_root:
-                    raise SWCFormatError(f"Could not write {path}. A tree "
-                                         f"contains multiple nodes with parent"
-                                         f" ID -1; trees must contain exactly "
-                                         f"one root node.")
                 has_written_root = True
 
             if decimal_places == -1:
@@ -232,6 +214,6 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
 
         # check for missing root node
         if not has_written_root:
-            raise SWCFormatError(f"Could not write {path}. A tree contains no"
-                                 f" nodes with parent ID -1; trees must "
-                                 f"contain exactly one root node.")
+            raise SWCFormatError(f"Could not write {path}. The SWC contains "
+                                 f"no node with parent ID -1; SWCs must "
+                                 f"contain a root node.")

@@ -60,5 +60,5 @@ class SWC:
                 self.nodes[id].parent_id = new_parent_id
             new_id = old_id_to_new_id[id]
             new_nodes[new_id] = self.nodes[id]
-        
+
         self.nodes = new_nodes
