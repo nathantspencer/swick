@@ -1,6 +1,6 @@
-from .node import Node
-
 import math
+
+from .node import Node
 
 
 class SWC:

@@ -76,9 +76,9 @@ def combine_swcs(swcs: list[SWC]):
                 highest_id = new_id
 
         # second pass to create modified copies of existing nodes
-        for id in swc.nodes:
-            new_id = old_id_to_new_id[id]
-            old_node = swc.nodes[id]
+        for old_id in swc.nodes:
+            new_id = old_id_to_new_id[old_id]
+            old_node = swc.nodes[old_id]
             new_parent_id = old_node.parent_id
             if new_parent_id != -1:
                 new_parent_id = old_id_to_new_id[old_node.parent_id]
