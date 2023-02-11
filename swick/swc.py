@@ -49,16 +49,16 @@ class SWC:
         new_nodes = {}
 
         # first pass to create mapping from old to new IDs
-        for id in self.nodes:
-            old_id_to_new_id[id] = next_id
+        for old_id in self.nodes:
+            old_id_to_new_id[old_id] = next_id
             next_id += 1
 
         # second pass to create modified copies of existing nodes
-        for id in self.nodes:
-            if self.nodes[id].parent_id != -1:
-                new_parent_id = old_id_to_new_id[self.nodes[id].parent_id]
-                self.nodes[id].parent_id = new_parent_id
-            new_id = old_id_to_new_id[id]
-            new_nodes[new_id] = self.nodes[id]
+        for old_id in self.nodes:
+            if self.nodes[old_id].parent_id != -1:
+                new_parent_id = old_id_to_new_id[self.nodes[old_id].parent_id]
+                self.nodes[old_id].parent_id = new_parent_id
+            new_id = old_id_to_new_id[old_id]
+            new_nodes[new_id] = self.nodes[old_id]
 
         self.nodes = new_nodes
