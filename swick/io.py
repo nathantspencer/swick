@@ -137,7 +137,7 @@ def read_swc(path: str):
 
             nodes[id] = Node(type, x, y, z, radius, parent_id)
 
-        for node in nodes:
+        for node in nodes.values():
             if node.parent_id != -1 and node.parent_id not in nodes:
                 raise SWCFormatError(f"Could not read {path}. Line "
                                      f"{id_line_numbers[id]} refers to a "

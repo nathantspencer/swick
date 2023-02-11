@@ -30,7 +30,7 @@ def split_swc(swc: SWC):
     swcs = []
     for root_id in root_nodes:
         parent_id_stack = [root_id]
-        nodes = {root_id: root_nodes[root_id]}
+        nodes = {root_id: swc.nodes[root_id]}
 
         while parent_id_stack:
             parent_id = parent_id_stack.pop()
@@ -78,11 +78,14 @@ def combine_swcs(swcs: list[SWC]):
         # second pass to create modified copies of existing nodes
         for id in swc.nodes:
             new_id = old_id_to_new_id[id]
-            if swc.nodes[id].parent_id != -1:
-                new_parent_id = old_id_to_new_id[swc.nodes[id].parent_id]
-                swc.nodes[id].parent_id = new_parent_id
-            new_nodes[new_id] = swc.nodes[id]
+            old_node = swc.nodes[id]
+            new_parent_id = old_node.parent_id
+            if new_parent_id != -1:
+                new_parent_id = old_id_to_new_id[old_node.parent_id]
+            new_nodes[new_id] = Node(old_node.type, old_node.x, old_node.y,
+                                     old_node.z, old_node.radius,
+                                     new_parent_id)
 
         id_offset = highest_id
 
-    return SWC(nodes)
+    return SWC(new_nodes)

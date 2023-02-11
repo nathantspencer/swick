@@ -13,7 +13,7 @@ class SWC:
     """
 
     def __init__(self, nodes: dict[int, Node]):
-        self.node = nodes
+        self.nodes = nodes
 
     def total_length(self):
         """
@@ -40,7 +40,7 @@ class SWC:
         Modifies the IDs of the ``Node``\s contained by this ``SWC`` such that
         they form a contiguous series of natural numbers beginning at 1.
         The order of node IDs will not change, i.e. a node ID that is greater
-        than another given node ID prior to this operation will still be
+        than another given node ID before this operation will still be
         greater afterwards.
         """
 
