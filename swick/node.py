@@ -16,7 +16,7 @@ class Node:
     :param parent_id:
         the unique ID of another node that is the "parent"  of this node: a
         connected node that is one step closer to the root node of the tree
-        (a root node has no parent, and will use a value ``-1`` for this field)
+        (a root node has no parent and will use a value ``-1`` for this field)
     """
 
     def __init__(self, type: int, x: float, y: float, z: float, radius: float,
