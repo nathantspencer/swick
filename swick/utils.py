@@ -17,14 +17,14 @@ def split_swc(swc: SWC):
     # first pass to create map from parent ID to child IDs
     root_nodes = []
     parent_id_to_child_ids = {}
-    for id in swc.nodes:
-        parent_id = swc.nodes[id].parent_id
+    for node_id in swc.nodes:
+        parent_id = swc.nodes[node_id].parent_id
         if parent_id == -1:
-            root_nodes.append(id)
+            root_nodes.append(node_id)
         elif parent_id in parent_id_to_child_ids:
-            parent_id_to_child_ids[parent_id].append(id)
+            parent_id_to_child_ids[parent_id].append(node_id)
         else:
-            parent_id_to_child_ids[parent_id] = [id]
+            parent_id_to_child_ids[parent_id] = [node_id]
 
     # second pass using DFS to separate connected components
     swcs = []
@@ -69,9 +69,9 @@ def combine_swcs(swcs: list[SWC]):
 
         # first pass to create mapping from old to new IDs
         old_id_to_new_id = {}
-        for id in swc.nodes:
-            new_id = id + id_offset
-            old_id_to_new_id[id] = new_id
+        for old_id in swc.nodes:
+            new_id = old_id + id_offset
+            old_id_to_new_id[old_id] = new_id
             if new_id > highest_id:
                 highest_id = new_id
 
