@@ -1,24 +1,49 @@
 from .node import Node
-from .tree import Tree
 from .swc import SWC
 
 
 def split_swc(swc: SWC):
     """
     Splits an ``SWC`` object into one or more ``SWC`` objects, each containing
-    a single tree. Node IDs are not modified by this process.
+    a single root node. Node IDs are not modified by this process.
 
     :parameter swc:
         the ``SWC`` object to be split
 
     :return:
-        a list of ``SWC`` objects each containing one tree
+        a list of ``SWC`` objects each containing one root node
     """
 
-    result = []
-    for tree in swc.trees:
-        result.append(SWC([tree]))
-    return result
+    # first pass to create map from parent ID to child IDs
+    root_nodes = []
+    parent_id_to_child_ids = {}
+    for id in swc.nodes:
+        parent_id = swc.nodes[id].parent_id
+        if parent_id == -1:
+            root_nodes.append(id)
+        elif parent_id in parent_id_to_child_ids:
+            parent_id_to_child_ids[parent_id].append(id)
+        else:
+            parent_id_to_child_ids[parent_id] = [id]
+
+    # second pass using DFS to separate connected components
+    swcs = []
+    for root_id in root_nodes:
+        parent_id_stack = [root_id]
+        nodes = {root_id: swc.nodes[root_id]}
+
+        while parent_id_stack:
+            parent_id = parent_id_stack.pop()
+            if parent_id not in parent_id_to_child_ids:
+                continue
+            for child_id in parent_id_to_child_ids[parent_id]:
+                nodes[child_id] = swc.nodes[child_id]
+                parent_id_stack.append(child_id)
+            parent_id_to_child_ids.pop(parent_id)
+
+        swcs.append(SWC(nodes))
+
+    return swcs
 
 
 def combine_swcs(swcs: list[SWC]):
@@ -33,33 +58,34 @@ def combine_swcs(swcs: list[SWC]):
         a list of ``SWC`` objects to be combined
 
     :return:
-        a single ``SWC`` object containing all ``Tree``\s from the input
+        a single ``SWC`` object containing all ``Node``\s from the input
     """
 
-    trees = []
     id_offset = 0
     highest_id = 0
+    new_nodes = {}
+
     for swc in swcs:
-        for tree in swc.trees:
-            old_id_to_new_id = {}
-            new_tree_nodes = {}
 
-            # first pass to create mapping from old to new IDs
-            for id in tree.nodes:
-                new_id = id + id_offset
-                old_id_to_new_id[id] = new_id
-                if new_id > highest_id:
-                    highest_id = new_id
+        # first pass to create mapping from old to new IDs
+        old_id_to_new_id = {}
+        for id in swc.nodes:
+            new_id = id + id_offset
+            old_id_to_new_id[id] = new_id
+            if new_id > highest_id:
+                highest_id = new_id
 
-            # second pass to create modified copies of existing nodes
-            for id in tree.nodes:
-                new_id = old_id_to_new_id[id]
-                if tree.nodes[id].parent_id != -1:
-                    new_parent_id = old_id_to_new_id[tree.nodes[id].parent_id]
-                    tree.nodes[id].parent_id = new_parent_id
-                new_tree_nodes[new_id] = tree.nodes[id]
+        # second pass to create modified copies of existing nodes
+        for id in swc.nodes:
+            new_id = old_id_to_new_id[id]
+            old_node = swc.nodes[id]
+            new_parent_id = old_node.parent_id
+            if new_parent_id != -1:
+                new_parent_id = old_id_to_new_id[old_node.parent_id]
+            new_nodes[new_id] = Node(old_node.type, old_node.x, old_node.y,
+                                     old_node.z, old_node.radius,
+                                     new_parent_id)
 
-            trees.append(Tree(new_tree_nodes))
         id_offset = highest_id
-    result = SWC(trees)
-    return result
+
+    return SWC(new_nodes)
