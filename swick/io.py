@@ -92,8 +92,8 @@ def read_swc(path: str):
     """
 
     with open(path, 'r') as swc_file:
-        nodes = dict()
-        id_line_numbers = dict()
+        nodes = {}
+        id_line_numbers = {}
 
         line_number = 0
         for line in swc_file:
@@ -172,7 +172,7 @@ def write_swc(path: str, swc: SWC, delimeter: str = " ",
         if the ``SWC`` object is invalid
     """
 
-    if not len(delimeter):
+    if not delimeter:
         raise ValueError(f"Could not write {path}. Delimeter may not be an"
                          f" empty string.")
     elif re.sub(r'[\t ]+', '', delimeter) != "":
